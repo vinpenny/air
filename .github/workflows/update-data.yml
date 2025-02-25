@@ -1,0 +1,32 @@
+name: Update Air Quality Data
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Run every hour
+  workflow_dispatch:      # Allow manual triggers
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+          
+      - name: Install dependencies
+        run: pip install requests
+        
+      - name: Fetch air quality data
+        run: python scripts/fetch_data.py
+        env:
+          WAQI_API_TOKEN: ${{ secrets.WAQI_API_TOKEN }}
+          
+      - name: Commit and push if changed
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add public/api/air-quality-data.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update air quality data" && git push) 
