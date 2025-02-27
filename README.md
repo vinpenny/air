@@ -84,9 +84,7 @@ src/
    npm run dev
    ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
